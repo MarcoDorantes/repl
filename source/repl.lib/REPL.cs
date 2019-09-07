@@ -24,7 +24,7 @@ namespace nutility
         public TextWriter Writer;
         public TextReader Reader;
 
-        public void loop(InputReplLevel<T> current_level)
+        public void Loop(InputReplLevel<T> current_level)
         {
             do
             {

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 //using static System.Console;
@@ -29,16 +30,18 @@ namespace repl.spec
             current_level.ClassChilds.Add("c2", typeof(InputX));
             current_level.Instances.Add("x1", inputX_instance);
 
-            var input_lines = new[] { "d", null };
-            var reader = new StringReader($"{input_lines.Aggregate(new StringBuilder(), (w, n) => w.AppendFormat("{0}", n))}");
+            var input_lines = new[] { "d" };
+            var reader = new StringReader(asTextContent(input_lines));
             var writer = new StringWriter();
             var repl = new nutility.REPL<InputX> { Reader = reader, Writer = writer };
 
             //Act
-            repl.loop(current_level);
+            repl.Loop(current_level);
 
             //Assert
-            Assert.IsTrue($"{writer.GetStringBuilder()}".Contains("x1"));
+            Assert.IsTrue($"{writer}".Contains("x1"));
         }
+
+        private string asTextContent(IEnumerable<string> lines) => $"{lines?.Aggregate(new StringWriter(), (whole, next) => { whole.WriteLine(next); return whole; })}";
     }
 }
