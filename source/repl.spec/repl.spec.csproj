@@ -54,6 +54,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\repl.cli1\repl.cli1.csproj">
+      <Project>{c0fdc7d0-5b24-438f-a268-905a94a8eef1}</Project>
+      <Name>repl.cli1</Name>
+    </ProjectReference>
     <ProjectReference Include="..\repl.lib\repl.lib.csproj">
       <Project>{0a7e2d59-85f9-46a4-b9db-287011328f08}</Project>
       <Name>repl.lib</Name>
