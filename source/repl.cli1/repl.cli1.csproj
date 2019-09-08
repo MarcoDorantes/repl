@@ -8,4 +8,8 @@
     <PackageReference Include="nSwitch" Version="3.7.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\repl.lib\repl.lib.csproj" />
+  </ItemGroup>
+
 </Project>
