@@ -2,9 +2,18 @@
 using System.Linq;
 using System.IO;
 
+using static System.Console;
+
 namespace repl.cli1
 {
-    public class RootInput { }
+    public class RootInput
+    {
+        public int N;
+        public void f1()
+        {
+            WriteLine($"{nameof(N)}: {N}");
+        }
+    }
 
     public class CLI
     {
@@ -16,11 +25,8 @@ namespace repl.cli1
                 {
                     writer = Console.Out;
                 }
-                if (Environment.UserInteractive)
-                {
-                    writer.WriteLine($"Hello, {Environment.UserDomainName}\\{Environment.UserName} !!!");
-                    writer.WriteLine($"PID: {System.Diagnostics.Process.GetCurrentProcess().Id} Thread: {System.Threading.Thread.CurrentThread.ManagedThreadId} Culture: {System.Threading.Thread.CurrentThread?.CurrentUICulture?.Name}, {System.Threading.Thread.CurrentThread?.CurrentCulture?.Name}\n");
-                }
+                writer.WriteLine($"Hello, {Environment.UserDomainName}\\{Environment.UserName} !!!");
+                writer.WriteLine($"PID: {System.Diagnostics.Process.GetCurrentProcess().Id} Thread: {System.Threading.Thread.CurrentThread.ManagedThreadId} Culture: {System.Threading.Thread.CurrentThread?.CurrentUICulture?.Name}, {System.Threading.Thread.CurrentThread?.CurrentCulture?.Name}\n");
                 if (!(args?.Any() == true) || args?.First().Contains("?") == true)
                 {
                     writer.WriteLine($"Working with {GetHostProcessName()}:");

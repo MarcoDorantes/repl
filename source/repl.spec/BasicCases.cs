@@ -30,7 +30,7 @@ namespace repl.spec
             current_level.ClassChilds.Add("c2", typeof(InputX));
             current_level.Instances.Add("x1", inputX_instance);
 
-            var input_lines = new[] { "d" };
+            var input_lines = new[] { "?" };
             var reader = new StringReader(asTextContent(input_lines));
             var writer = new StringWriter();
             var repl = new nutility.REPL<InputX> { Reader = reader, Writer = writer };
@@ -51,22 +51,55 @@ namespace repl.spec
         public void basic()
         {
             //Arrange
-            var inputX_instance = new cli1.RootInput();
-            var current_level = new nutility.InputReplLevel<cli1.RootInput>();
-            current_level.ClassChilds.Add("c2", typeof(cli1.RootInput));
-            current_level.Instances.Add("x1", inputX_instance);
+            var asFound = Console.Out;
+            try
+            {
+                var inputRoot_instance = new cli1.RootInput();
+                var current_level = new nutility.InputReplLevel<cli1.RootInput>();
+                current_level.ClassChilds.Add("c2", typeof(cli1.RootInput));
+                current_level.Instances.Add("x1", inputRoot_instance);
 
-            var input_lines = new[] { "d" };
-            var reader = new StringReader(asTextContent(input_lines));
-            var writer = new StringWriter();
-            var repl = new nutility.REPL<cli1.RootInput> { Reader = reader, Writer = writer };
+                var input_lines = new[] { "-f1 -n=-132" };
+                var reader = new StringReader(asTextContent(input_lines));
+                var writer = new StringWriter();
+                Console.SetOut(writer);
+                var repl = new nutility.REPL<cli1.RootInput> { Reader = reader, Writer = writer };
 
-            //Act
-            repl.Loop(current_level);
+                //Act
+                repl.Loop(current_level);
 
-            //Assert
-            Assert.IsTrue($"{writer}".Contains("x1"));
+                //Assert
+                Assert.IsTrue($"{writer}".Contains("N: -132"));
+            }
+            finally
+            {
+                Console.SetOut(asFound);
+            }
         }
+
+        [TestMethod]
+        public void entry_point()
+        {
+            var asFound = Console.Out;
+            try
+            {
+                //Arrange
+                var input_lines = new[] { "-f1", "-n=3" };
+                var writer = new StringWriter();
+                Console.SetOut(writer);
+
+                //Act
+                repl.cli1.CLI.MainEntryPoint(input_lines);
+
+                //Assert
+                Assert.IsTrue($"{writer}".Contains("N: 3"));
+            }
+            finally
+            {
+                Console.SetOut(asFound);
+            }
+        }
+
         private string asTextContent(IEnumerable<string> lines) => $"{lines?.Aggregate(new StringWriter(), (whole, next) => { whole.WriteLine(next); return whole; })}";
     }
 }

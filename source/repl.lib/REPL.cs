@@ -32,16 +32,24 @@ namespace nutility
                 var input = Reader.ReadLine();
                 if (string.IsNullOrWhiteSpace(input)) break;
                 var args = nutility.SystemArgumentParser.Parse(input);
-                Writer.WriteLine($"Current input class: {current_level.InputClass.FullName}");
-                Writer.WriteLine($"\r\nCurrent input child classes ({current_level.ClassChilds.Count}):");
-                foreach (var id in current_level.ClassChilds.Keys)
+                //var opts = new nutility.Switch(args);
+                if (input == "?")
                 {
-                    Writer.WriteLine($"\t{id} ({current_level.ClassChilds[id].FullName})");
+                    Writer.WriteLine($"Current input class: {current_level.InputClass.FullName}");
+                    Writer.WriteLine($"\r\nCurrent input child classes ({current_level.ClassChilds.Count}):");
+                    foreach (var id in current_level.ClassChilds.Keys)
+                    {
+                        Writer.WriteLine($"\t{id} ({current_level.ClassChilds[id].FullName})");
+                    }
+                    Writer.WriteLine($"\r\nCurrent input instances ({current_level.Instances.Count}):");
+                    foreach (var id in current_level.Instances.Keys)
+                    {
+                        Writer.WriteLine($"\t{id} ({current_level.Instances[id].GetType().FullName})");
+                    }
                 }
-                Writer.WriteLine($"\r\nCurrent input instances ({current_level.Instances.Count}):");
-                foreach (var id in current_level.Instances.Keys)
+                else
                 {
-                    Writer.WriteLine($"\t{id} ({current_level.Instances[id].GetType().FullName})");
+                    nutility.Switch.AsType<T>(args);
                 }
             } while (true);
         }
