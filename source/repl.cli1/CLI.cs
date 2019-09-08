@@ -29,7 +29,7 @@ namespace repl.cli1
         {
           writer = Console.Out;
         }
-        var repl_level = new nutility.InputReplLevel<RootInput>();
+        var repl_level = new nutility.InputReplLevel<RootInput>("MVP");
         //repl_level.ClassChilds.Add("c2", typeof(RootInput));
 
         var repl = new nutility.REPL<RootInput> { Reader = reader, Writer = writer };

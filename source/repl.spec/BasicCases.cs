@@ -26,7 +26,7 @@ namespace repl.spec
     {
       //Arrange
       var inputX_instance = new InputX();
-      var current_level = new nutility.InputReplLevel<InputX>();
+      var current_level = new nutility.InputReplLevel<InputX>("UC-1");
       current_level.ClassChilds.Add("c2", typeof(InputX));
       current_level.Instances.Add("x1", inputX_instance);
 
@@ -55,7 +55,7 @@ namespace repl.spec
       try
       {
         var inputRoot_instance = new cli1.RootInput();
-        var current_level = new nutility.InputReplLevel<cli1.RootInput>();
+        var current_level = new nutility.InputReplLevel<cli1.RootInput>("UC-2");
         current_level.ClassChilds.Add("c2", typeof(cli1.RootInput));
         current_level.Instances.Add("x1", inputRoot_instance);
 
