@@ -71,21 +71,21 @@ namespace nutility
         {
           ShowCurrentLevel(input, current_level);
         }
-        else if (opts.IndexedArguments?.Count == 2 && opts.IndexedArguments?.First()?.ToLower() == "new" && !string.IsNullOrWhiteSpace(opts.IndexedArguments[1]))
+        else if (opts.IndexedArguments?.Count == 2 && opts.IndexedArguments?.First() == "new" && !string.IsNullOrWhiteSpace(opts.IndexedArguments[1]))
         {
           @new(opts.IndexedArguments[1], current_level);
         }
-        else if (opts.IndexedArguments?.Count == 2 && opts.IndexedArguments?.First()?.ToLower() == "delete" && !string.IsNullOrWhiteSpace(opts.IndexedArguments[1]))
+        else if (opts.IndexedArguments?.Count == 2 && opts.IndexedArguments?.First() == "delete" && !string.IsNullOrWhiteSpace(opts.IndexedArguments[1]))
         {
           delete(opts.IndexedArguments[1], current_level);
         }
-        else if (opts.IndexedArguments?.Count == 1 && opts.IndexedArguments?.First()?.ToLower() == "cls")
+        else if (opts.IndexedArguments?.Count == 1 && opts.IndexedArguments?.First() == "cls")
         {
           clear();
         }
         else
         {
-          var childInputInstanceKey = args.Any() && current_level.Instances.ContainsKey(args.First().ToLower()) ? args.First() : null;
+          var childInputInstanceKey = args.Any() && current_level.Instances.ContainsKey(args.First()) ? args.First() : null;
           var childInputClassKey = args.Any() && current_level.ClassChilds.ContainsKey(args.First()) ? args.First() : null;
           var target_args = args.SkipWhile((arg, index) => index < 1).ToArray();
           if (childInputInstanceKey != null && target_args?.Any() == true)
@@ -120,7 +120,15 @@ namespace nutility
     {
       if (current_level.Instances.ContainsKey(key))
       {
-        var classname = current_level.Instances[key].GetType().FullName;
+        var instance = current_level.Instances[key];
+        var classname = instance?.GetType().FullName;
+        IDisposable disposable = instance as IDisposable;
+        if (disposable != null)
+        {
+          Writer.WriteLine($"\t{key} ({classname}) disposing...");
+          disposable.Dispose();
+          Writer.WriteLine($"\t{key} ({classname}) disposed.");
+        }
         current_level.Instances.Remove(key);
         Writer.WriteLine($"\t{key} ({classname}) removed.");
       }
