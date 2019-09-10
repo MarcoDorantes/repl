@@ -15,6 +15,14 @@ namespace repl.cli1
     }
   }
 
+  public class InputUC2
+  {
+    public int N;
+    public void f2()
+    {
+      WriteLine($"{nameof(N)}: {N}");
+    }
+  }
   public class CLI
   {
     public static void MainEntryPoint(string[] args, TextReader reader = null, TextWriter writer = null)
@@ -30,7 +38,7 @@ namespace repl.cli1
           writer = Console.Out;
         }
         var repl_level = new nutility.InputReplLevel<RootInput>("MVP");
-        //repl_level.ClassChilds.Add("c2", typeof(RootInput));
+        repl_level.ClassChilds.Add("UC2", typeof(InputUC2));
 
         var repl = new nutility.REPL<RootInput> { Reader = reader, Writer = writer };
         repl.Loop(repl_level);

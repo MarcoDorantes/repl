@@ -27,6 +27,20 @@ namespace nutility
     public TextWriter Writer { get; set; }
     public TextReader Reader { get; set; }
 
+    /* Spec cases for units and whole interaction:
+ dir = list current input class ID/Name
+ _   = list current input class Usage
+ dir = list current input child classes
+ _   = add/create new input instance of the current input class or of the given/explicitly-qualified path/level input class
+ _   = clone input instance of the current input instance or of the given/explicitly-qualified path/level input instance
+ dir = list current input child instances
+ _   = change to or make-current one of the childs (class or instance)
+ _   = change to or make-current the parent of the current class or instance
+ (args1) = process args on current class or instance
+ (args2) = process args on class or instance of a given/explicit path/level
+ record, store(script) and replay
+*/
+
     public void Loop(InputReplLevel<T> current_level)
     {
       #region Input validation
@@ -52,23 +66,70 @@ namespace nutility
         input = input.Trim();
         var args = nutility.SystemArgumentParser.Parse(input);
         var opts = new nutility.Switch(args);
+        if (args?.Any() == false || opts?.Any() == false) continue;
         if (input.StartsWith("?"))
         {
-          ShowUsage(input, current_level);
+          ShowCurrentLevel(input, current_level);
         }
         else if (opts.IndexedArguments?.Count == 2 && opts.IndexedArguments?.First()?.ToLower() == "new" && !string.IsNullOrWhiteSpace(opts.IndexedArguments[1]))
         {
-          var key = opts.IndexedArguments[1];
-          current_level.Instances.Add(key, new T());
+          @new(opts.IndexedArguments[1], current_level);
+        }
+        else if (opts.IndexedArguments?.Count == 2 && opts.IndexedArguments?.First()?.ToLower() == "delete" && !string.IsNullOrWhiteSpace(opts.IndexedArguments[1]))
+        {
+          delete(opts.IndexedArguments[1], current_level);
+        }
+        else if (opts.IndexedArguments?.Count == 1 && opts.IndexedArguments?.First()?.ToLower() == "cls")
+        {
+          clear();
         }
         else
         {
-          nutility.Switch.AsType<T>(args);
+          var childInputInstanceKey = args.Any() && current_level.Instances.ContainsKey(args.First().ToLower()) ? args.First() : null;
+          var childInputClassKey = args.Any() && current_level.ClassChilds.ContainsKey(args.First()) ? args.First() : null;
+          var target_args = args.SkipWhile((arg, index) => index < 1).ToArray();
+          if (childInputInstanceKey != null && target_args?.Any() == true)
+          {
+            nutility.Switch.AsType(target_args, current_level.Instances[childInputInstanceKey]);
+          }
+          else if (childInputClassKey != null && target_args?.Any() == true)
+          {
+            nutility.Switch.AsType(target_args, current_level.ClassChilds[childInputClassKey]);
+          }
+          else
+          {
+            nutility.Switch.AsType<T>(args);
+          }
         }
       } while (true);
     }
 
-    private void ShowUsage(string input, InputReplLevel<T> current_level)
+    private void @new(string key, InputReplLevel<T> current_level)
+    {
+      if (current_level.Instances.ContainsKey(key))
+      {
+        Writer.WriteLine($"{key} already identifies an existing instance.");
+      }
+      else
+      {
+        current_level.Instances.Add(key, new T());
+        Writer.WriteLine($"\t{key} ({current_level.Instances[key].GetType().FullName})");
+      }
+    }
+    private void delete(string key, InputReplLevel<T> current_level)
+    {
+      if (current_level.Instances.ContainsKey(key))
+      {
+        var classname = current_level.Instances[key].GetType().FullName;
+        current_level.Instances.Remove(key);
+        Writer.WriteLine($"\t{key} ({classname}) removed.");
+      }
+      else
+      {
+        Writer.WriteLine($"{key} not found among existing instances.");
+      }
+    }
+    private void ShowCurrentLevel(string input, InputReplLevel<T> current_level)
     {
       Writer.WriteLine($"Current input class: {current_level.InputClass.FullName}");
       if (input == "??")
@@ -85,11 +146,13 @@ namespace nutility
       {
         Writer.WriteLine($"\t{id} ({current_level.Instances[id].GetType().FullName})");
       }
-      Writer.WriteLine("\r\nGeneral commands: ? ?? new");
+      Writer.WriteLine("\r\nGeneral commands: ? ?? new delete cls");
       if (input == "??")
       {
         Writer.WriteLine("\t? ?? (this help)");
         Writer.WriteLine("\tnew <id> (new instance of current input class)");
+        Writer.WriteLine("\tdelete <id> (remove an existing instance of current input class)");
+        Writer.WriteLine("\tcls (clear console)");
       }
     }
 
@@ -105,5 +168,6 @@ namespace nutility
         Writer.WriteLine($"\t{line}");
       } while (true);
     }
+    private void clear() => Console.Clear();
   }
 }
