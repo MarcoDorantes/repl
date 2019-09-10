@@ -215,4 +215,15 @@ namespace nutility
     }
     private void clear() => Console.Clear();
   }
+
+
+  //Hierarchical approach?
+  public class _InputReplLevel
+  { }
+  public class ReplTree
+  {
+    public void Loop(nutility.Tree<string, _InputReplLevel> tree)
+    {
+    }
+  }
 }

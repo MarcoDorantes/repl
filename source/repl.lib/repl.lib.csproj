@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="nnTree" Version="1.0.1" />
     <PackageReference Include="nSwitch" Version="3.7.0" />
   </ItemGroup>
 
