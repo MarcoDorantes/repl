@@ -58,12 +58,20 @@ namespace nutility
       }
       #endregion
 
+      //var current_path = new Stack<string>();
+      //current_path.Push(current_repl.Value.Name);
+
       do
       {
+        Writer.WriteLine();
+        Writer.Write($"{System.Reflection.MethodInfo.GetCurrentMethod().Name}: ");
         Writer.Write("> ");
-        var input = Reader.ReadLine();
+
+        //Writer.WriteLine();
+        //Writer.Write($"{path(current_path)}: ");
+
+        var input = Reader.ReadLine()?.Trim();
         if (string.IsNullOrWhiteSpace(input)) break;
-        input = input.Trim();
         var args = nutility.SystemArgumentParser.Parse(input);
         var opts = new nutility.Switch(args);
         if (args?.Any() == false || opts?.Any() == false) continue;
@@ -118,6 +126,16 @@ namespace nutility
       } while (true);
     }
 
+    private string path(Stack<string> stack)
+    {
+      var result = "";
+      if (stack.Count > 0)
+      {
+        result = $"{stack.ToArray().Reverse().Aggregate(new StringBuilder(), (w, n) => w.AppendFormat("/{0}", n))}";
+      }
+      return result;
+    }
+
     private void @new(string key, InputReplLevel<T> current_level)
     {
       if (current_level.Instances.ContainsKey(key))
@@ -156,7 +174,8 @@ namespace nutility
       Writer.WriteLine($"Current input class: {current_level.InputClass.FullName}");
       if (input.Contains("??"))
       {
-          ShowUsage(current_level.InputClass);
+        Writer.WriteLine($"Working with {current_level.InputClass.FullName}:");
+        ShowUsage(current_level.InputClass);
       }
       Writer.WriteLine($"\r\nCurrent input child classes ({current_level.ClassChilds.Count}):");
       foreach (var id in current_level.ClassChilds.Keys)
