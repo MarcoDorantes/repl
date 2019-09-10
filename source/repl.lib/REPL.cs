@@ -88,13 +88,27 @@ namespace nutility
           var childInputInstanceKey = args.Any() && current_level.Instances.ContainsKey(args.First()) ? args.First() : null;
           var childInputClassKey = args.Any() && current_level.ClassChilds.ContainsKey(args.First()) ? args.First() : null;
           var target_args = args.SkipWhile((arg, index) => index < 1).ToArray();
-          if (childInputInstanceKey != null && target_args?.Any() == true)
+          if (childInputInstanceKey != null)
           {
-            nutility.Switch.AsType(target_args, current_level.Instances[childInputInstanceKey]);
+            if (target_args?.Any() == true)
+            {
+              nutility.Switch.AsType(target_args, current_level.Instances[childInputInstanceKey]);
+            }
+            else
+            {
+              //TODO change current
+            }
           }
-          else if (childInputClassKey != null && target_args?.Any() == true)
+          else if (childInputClassKey != null)
           {
-            nutility.Switch.AsType(target_args, current_level.ClassChilds[childInputClassKey]);
+            if (target_args?.Any() == true)
+            {
+              nutility.Switch.AsType(target_args, current_level.ClassChilds[childInputClassKey]);
+            }
+            else
+            {
+              //TODO change current
+            }
           }
           else
           {
@@ -140,21 +154,25 @@ namespace nutility
     private void ShowCurrentLevel(string input, InputReplLevel<T> current_level)
     {
       Writer.WriteLine($"Current input class: {current_level.InputClass.FullName}");
-      if (input == "??")
+      if (input.Contains("??"))
       {
-        ShowUsage(current_level.InputClass);
+          ShowUsage(current_level.InputClass);
       }
       Writer.WriteLine($"\r\nCurrent input child classes ({current_level.ClassChilds.Count}):");
       foreach (var id in current_level.ClassChilds.Keys)
       {
         Writer.WriteLine($"\t{id} ({current_level.ClassChilds[id].FullName})");
+        if (input.Contains("???"))
+        {
+          ShowUsage(current_level.ClassChilds[id]);
+        }
       }
       Writer.WriteLine($"\r\nCurrent input instances ({current_level.Instances.Count}):");
       foreach (var id in current_level.Instances.Keys)
       {
         Writer.WriteLine($"\t{id} ({current_level.Instances[id].GetType().FullName})");
       }
-      Writer.WriteLine("\r\nGeneral commands: ? ?? new delete cls");
+      Writer.WriteLine("\r\nGeneral commands: ? ?? ??? new delete cls");
       if (input == "??")
       {
         Writer.WriteLine("\t? ?? (this help)");

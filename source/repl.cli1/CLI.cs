@@ -15,12 +15,16 @@ namespace repl.cli1
     }
   }
 
-  public class InputUC2
+  public class InputUC2 : IDisposable
   {
     public int N;
     public void f2()
     {
       WriteLine($"{nameof(N)}: {N}");
+    }
+    public void Dispose()
+    {
+      WriteLine($"Dispose {nameof(InputUC2)}");
     }
   }
   public class CLI
