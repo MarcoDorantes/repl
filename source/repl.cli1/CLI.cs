@@ -41,11 +41,20 @@ namespace repl.cli1
         {
           writer = Console.Out;
         }
-        var repl_level = new nutility.InputReplLevel<RootInput>("MVP");
-        repl_level.ClassChilds.Add("UC2", typeof(InputUC2));
+        //var repl_level = new nutility.InputReplLevel<RootInput>("MVP");
+        //repl_level.ClassChilds.Add("UC2", typeof(InputUC2));
 
-        var repl = new nutility.REPL<RootInput> { Reader = reader, Writer = writer };
-        repl.Loop(repl_level);
+        //var repl = new nutility.REPL<RootInput> { Reader = reader, Writer = writer };
+        //repl.Loop(repl_level);
+
+        var mvp = new nutility._InputReplLevel("MVP", typeof(RootInput));
+        var tree = new nutility.Tree<string, nutility._InputReplLevel> { Value = mvp };
+        var uc2 = new nutility._InputReplLevel("UC2", typeof(InputUC2));
+        tree[uc2.ID] = new nutility.Tree<string, nutility._InputReplLevel> { Value = uc2, Parent = tree };
+
+        var repl = new nutility.ReplTree { Reader = reader, Writer = writer };
+        repl.Loop(tree);
+
         return;
 
         writer.WriteLine($"Hello, {Environment.UserDomainName}\\{Environment.UserName} !!!");
