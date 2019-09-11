@@ -5,11 +5,19 @@ VisualStudioVersion = 16.0.29230.47
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "repl.spec", "source\repl.spec\repl.spec.csproj", "{CE99DB03-843E-4D0D-AC5E-488648FD18F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "repl.lib", "source\repl.lib\repl.lib.csproj", "{0A7E2D59-85F9-46A4-B9DB-287011328F08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "repl.lib", "source\repl.lib\repl.lib.csproj", "{0A7E2D59-85F9-46A4-B9DB-287011328F08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "repl.app1", "source\repl.app1\repl.app1.csproj", "{4A0CCBB8-BD4A-4001-BBD1-82DA059DD930}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "repl.app1", "source\repl.app1\repl.app1.csproj", "{4A0CCBB8-BD4A-4001-BBD1-82DA059DD930}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "repl.cli1", "source\repl.cli1\repl.cli1.csproj", "{C0FDC7D0-5B24-438F-A268-905A94A8EEF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "repl.cli1", "source\repl.cli1\repl.cli1.csproj", "{C0FDC7D0-5B24-438F-A268-905A94A8EEF1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-Spec", "1-Spec", "{B04DC990-0EFE-4768-A6CC-78E1797DDA50}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4-Host", "4-Host", "{B01A9C88-E176-4F9C-825B-A7727C639FBE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2-Processor", "2-Processor", "{94767A8F-6AF6-4A0E-9AD7-DBE3EA838549}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-CLI", "3-CLI", "{B27CF9B6-157F-41EC-B85F-53FD6210477C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +44,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CE99DB03-843E-4D0D-AC5E-488648FD18F5} = {B04DC990-0EFE-4768-A6CC-78E1797DDA50}
+		{0A7E2D59-85F9-46A4-B9DB-287011328F08} = {94767A8F-6AF6-4A0E-9AD7-DBE3EA838549}
+		{4A0CCBB8-BD4A-4001-BBD1-82DA059DD930} = {B01A9C88-E176-4F9C-825B-A7727C639FBE}
+		{C0FDC7D0-5B24-438F-A268-905A94A8EEF1} = {B27CF9B6-157F-41EC-B85F-53FD6210477C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1B5235F1-F23F-4DEA-B254-0B9CB04B9596}

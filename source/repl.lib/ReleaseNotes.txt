@@ -1,0 +1,4 @@
+﻿Sep 11, 2019: Version 1.0.0
+	Published to nuget.org
+	https://www.nuget.org/packages/nRepl/1.0.0
+	Initial release.
