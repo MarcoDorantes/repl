@@ -62,14 +62,14 @@ namespace repl.cli1
         else*/
         {
           var mvp = new nutility.InputClassReplLevel("MVP", typeof(RootInput));
-          var use_case_hierarchy = new nutility.Tree<string, nutility.InputClassReplLevel> { Value = mvp };
+          var use_case_hierarchy_root = new nutility.Tree<string, nutility.InputReplLevel> { Value = mvp };
           var uc2 = new nutility.InputClassReplLevel("UC2", typeof(InputUC2));
-          use_case_hierarchy[uc2.ID] = new nutility.Tree<string, nutility.InputClassReplLevel> { Value = uc2, Parent = use_case_hierarchy };
+          use_case_hierarchy_root[uc2.ID] = new nutility.Tree<string, nutility.InputReplLevel> { Value = uc2, Parent = use_case_hierarchy_root };
           var uc3 = new nutility.InputClassReplLevel("UC3", typeof(InputUC3));
-          use_case_hierarchy[uc3.ID] = new nutility.Tree<string, nutility.InputClassReplLevel> { Value = uc3, Parent = use_case_hierarchy };
+          use_case_hierarchy_root[uc3.ID] = new nutility.Tree<string, nutility.InputReplLevel> { Value = uc3, Parent = use_case_hierarchy_root };
 
           var repl = new nutility.REPL { Reader = reader, Writer = writer };
-          repl.Loop(use_case_hierarchy);
+          repl.Loop(use_case_hierarchy_root);
         }
       }
       catch (Exception ex)

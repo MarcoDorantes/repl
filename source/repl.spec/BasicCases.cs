@@ -26,17 +26,18 @@ namespace repl.spec
     {
       //Arrange
       var inputX_instance = new InputX();
-      var current_level = new nutility.prev_InputReplLevel<InputX>("UC-1");
-      current_level.ClassChilds.Add("c2", typeof(InputX));
-      current_level.Instances.Add("x1", inputX_instance);
+      var current_level = new nutility.InputClassReplLevel("UC-1", typeof(InputX));
+      //current_level.ClassChilds.Add("c2", typeof(InputX));
+      //current_level.Instances.Add("x1", inputX_instance);
+      var tree = new nutility.Tree<string, nutility.InputReplLevel> { Value = current_level };
 
       var input_lines = new[] { "?" };
       var reader = new StringReader(asTextContent(input_lines));
       var writer = new StringWriter();
-      var repl = new nutility.prev_REPL<InputX> { Reader = reader, Writer = writer };
+      var repl = new nutility.REPL { Reader = reader, Writer = writer };
 
       //Act
-      repl.Loop(current_level);
+      repl.Loop(tree);
 
       //Assert
       Assert.IsTrue($"{writer}".Contains("x1"));
@@ -54,19 +55,20 @@ namespace repl.spec
       var asFound = Console.Out;
       try
       {
-        var inputRoot_instance = new cli1.RootInput();
-        var current_level = new nutility.prev_InputReplLevel<cli1.RootInput>("UC-2");
-        current_level.ClassChilds.Add("c2", typeof(cli1.RootInput));
-        current_level.Instances.Add("x1", inputRoot_instance);
+        //var inputRoot_instance = new ;
+        var current_level = new nutility.InputInstanceReplLevel("UC-2", new cli1.RootInput());
+        //current_level.ClassChilds.Add("c2", typeof(cli1.RootInput));
+        //current_level.Instances.Add("x1", inputRoot_instance);
+        var tree = new nutility.Tree<string, nutility.InputReplLevel> { Value = current_level };
 
         var input_lines = new[] { "-f1 -n=-132" };
         var reader = new StringReader(asTextContent(input_lines));
         var writer = new StringWriter();
         Console.SetOut(writer);
-        var repl = new nutility.prev_REPL<cli1.RootInput> { Reader = reader, Writer = writer };
+        var repl = new nutility.REPL { Reader = reader, Writer = writer };
 
         //Act
-        repl.Loop(current_level);
+        repl.Loop(tree);
 
         //Assert
         Assert.IsTrue($"{writer}".Contains("N: -132"));
