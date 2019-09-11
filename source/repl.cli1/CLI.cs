@@ -27,6 +27,14 @@ namespace repl.cli1
       WriteLine($"Dispose {nameof(InputUC2)}");
     }
   }
+  class InputUC3
+  {
+    public int N;
+    public void f3()
+    {
+      WriteLine($"{nameof(N)}: {N}");
+    }
+  }
   public class CLI
   {
     public static void MainEntryPoint(string[] args, TextReader reader = null, TextWriter writer = null)
@@ -41,32 +49,27 @@ namespace repl.cli1
         {
           writer = Console.Out;
         }
-        //var repl_level = new nutility.InputReplLevel<RootInput>("MVP");
-        //repl_level.ClassChilds.Add("UC2", typeof(InputUC2));
-
-        //var repl = new nutility.REPL<RootInput> { Reader = reader, Writer = writer };
-        //repl.Loop(repl_level);
-
-        var mvp = new nutility._InputReplLevel("MVP", typeof(RootInput));
-        var tree = new nutility.Tree<string, nutility._InputReplLevel> { Value = mvp };
-        var uc2 = new nutility._InputReplLevel("UC2", typeof(InputUC2));
-        tree[uc2.ID] = new nutility.Tree<string, nutility._InputReplLevel> { Value = uc2, Parent = tree };
-
-        var repl = new nutility.ReplTree { Reader = reader, Writer = writer };
-        repl.Loop(tree);
-
-        return;
-
-        writer.WriteLine($"Hello, {Environment.UserDomainName}\\{Environment.UserName} !!!");
-        writer.WriteLine($"PID: {System.Diagnostics.Process.GetCurrentProcess().Id} Thread: {System.Threading.Thread.CurrentThread.ManagedThreadId} Culture: {System.Threading.Thread.CurrentThread?.CurrentUICulture?.Name}, {System.Threading.Thread.CurrentThread?.CurrentCulture?.Name}\n");
-        if (!(args?.Any() == true) || args?.First().Contains("?") == true)
+        if (Environment.UserInteractive)
         {
-          writer.WriteLine($"Working with {GetHostProcessName()}:");
+          WriteLine($"Hello, {Environment.UserDomainName}\\{Environment.UserName} !!!");
+          WriteLine($"PID: {System.Diagnostics.Process.GetCurrentProcess().Id} Thread: {System.Threading.Thread.CurrentThread.ManagedThreadId} Culture: {System.Threading.Thread.CurrentThread?.CurrentUICulture?.Name}, {System.Threading.Thread.CurrentThread?.CurrentCulture?.Name}\n");
+        }
+        /*if (!(args?.Any() == true) || args?.First().Contains("?") == true)
+        {
+          WriteLine($"Working with {GetHostProcessName()}:");
           nutility.Switch.ShowUsage(typeof(RootInput));
         }
-        else
+        else*/
         {
-          nutility.Switch.AsType<RootInput>(args);
+          var mvp = new nutility.InputClassReplLevel("MVP", typeof(RootInput));
+          var use_case_hierarchy = new nutility.Tree<string, nutility.InputClassReplLevel> { Value = mvp };
+          var uc2 = new nutility.InputClassReplLevel("UC2", typeof(InputUC2));
+          use_case_hierarchy[uc2.ID] = new nutility.Tree<string, nutility.InputClassReplLevel> { Value = uc2, Parent = use_case_hierarchy };
+          var uc3 = new nutility.InputClassReplLevel("UC3", typeof(InputUC3));
+          use_case_hierarchy[uc3.ID] = new nutility.Tree<string, nutility.InputClassReplLevel> { Value = uc3, Parent = use_case_hierarchy };
+
+          var repl = new nutility.REPL { Reader = reader, Writer = writer };
+          repl.Loop(use_case_hierarchy);
         }
       }
       catch (Exception ex)

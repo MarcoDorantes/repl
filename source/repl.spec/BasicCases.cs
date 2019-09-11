@@ -26,14 +26,14 @@ namespace repl.spec
     {
       //Arrange
       var inputX_instance = new InputX();
-      var current_level = new nutility.InputReplLevel<InputX>("UC-1");
+      var current_level = new nutility.prev_InputReplLevel<InputX>("UC-1");
       current_level.ClassChilds.Add("c2", typeof(InputX));
       current_level.Instances.Add("x1", inputX_instance);
 
       var input_lines = new[] { "?" };
       var reader = new StringReader(asTextContent(input_lines));
       var writer = new StringWriter();
-      var repl = new nutility.REPL<InputX> { Reader = reader, Writer = writer };
+      var repl = new nutility.prev_REPL<InputX> { Reader = reader, Writer = writer };
 
       //Act
       repl.Loop(current_level);
@@ -55,7 +55,7 @@ namespace repl.spec
       try
       {
         var inputRoot_instance = new cli1.RootInput();
-        var current_level = new nutility.InputReplLevel<cli1.RootInput>("UC-2");
+        var current_level = new nutility.prev_InputReplLevel<cli1.RootInput>("UC-2");
         current_level.ClassChilds.Add("c2", typeof(cli1.RootInput));
         current_level.Instances.Add("x1", inputRoot_instance);
 
@@ -63,7 +63,7 @@ namespace repl.spec
         var reader = new StringReader(asTextContent(input_lines));
         var writer = new StringWriter();
         Console.SetOut(writer);
-        var repl = new nutility.REPL<cli1.RootInput> { Reader = reader, Writer = writer };
+        var repl = new nutility.prev_REPL<cli1.RootInput> { Reader = reader, Writer = writer };
 
         //Act
         repl.Loop(current_level);
