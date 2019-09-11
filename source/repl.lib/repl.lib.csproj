@@ -2,6 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>nutility</RootNamespace>
+    <PackageId>nRepl</PackageId>
+    <Authors>Marco A. Dorantes</Authors>
+    <Product>nRepl</Product>
+    <Description>A basic library to support Read-Evaluate-Print-Loops (REPL).</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/marcodorantes/repl</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/marcodorantes/repl</PackageProjectUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags>CLI REPL</PackageTags>
+    <PackageReleaseNotes>Initial release.</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>

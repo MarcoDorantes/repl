@@ -25,13 +25,10 @@ namespace repl.spec
     public void basic()
     {
       //Arrange
-      var inputX_instance = new InputX();
       var current_level = new nutility.InputClassReplLevel("UC-1", typeof(InputX));
-      //current_level.ClassChilds.Add("c2", typeof(InputX));
-      //current_level.Instances.Add("x1", inputX_instance);
       var tree = new nutility.Tree<string, nutility.InputReplLevel> { Value = current_level };
 
-      var input_lines = new[] { "?", "new x1" };
+      var input_lines = new[] { "new x1" , "?" };
       var reader = new StringReader(Common.asTextContent(input_lines));
       var writer = new StringWriter();
       var repl = new nutility.REPL { Reader = reader, Writer = writer };
@@ -40,7 +37,7 @@ namespace repl.spec
       repl.Loop(tree);
 
       //Assert
-      Assert.IsTrue($"{writer}".Contains("x1"));
+      Assert.IsTrue($"{writer}".Contains($"x1 ({typeof(InputX).FullName})"));
     }
   }
 
@@ -54,10 +51,7 @@ namespace repl.spec
       var asFound = Console.Out;
       try
       {
-        //var inputRoot_instance = new ;
         var current_level = new nutility.InputInstanceReplLevel("UC-2", new cli1.RootInput());
-        //current_level.ClassChilds.Add("c2", typeof(cli1.RootInput));
-        //current_level.Instances.Add("x1", inputRoot_instance);
         var tree = new nutility.Tree<string, nutility.InputReplLevel> { Value = current_level };
 
         var input_lines = new[] { "-f1 -n=-132" };
@@ -78,19 +72,20 @@ namespace repl.spec
       }
     }
 
-    [TestMethod,Ignore]
+    [TestMethod]
     public void entry_point()
     {
       var asFound = Console.Out;
       try
       {
         //Arrange
-        var input_lines = new[] { "-f1", "-n=3" };
+        var input_lines = new[] { "-f1 -n=3" };
+        var reader = new StringReader(Common.asTextContent(input_lines));
         var writer = new StringWriter();
         Console.SetOut(writer);
 
         //Act
-        repl.cli1.CLI.MainEntryPoint(input_lines);
+        repl.cli1.CLI.MainEntryPoint(input_lines, reader, writer);
 
         //Assert
         Assert.IsTrue($"{writer}".Contains("N: 3"));
@@ -100,7 +95,6 @@ namespace repl.spec
         Console.SetOut(asFound);
       }
     }
-
   }
 
   static class Common
