@@ -81,10 +81,13 @@ namespace nutility
         { DeleteCommand, 0 },
         { ClearCommand, 0 }
       };
+      ConsoleWindowWidth = 20;
     }
 
     public TextWriter Writer { get; set; }
     public TextReader Reader { get; set; }
+
+    public int ConsoleWindowWidth { get; set; }
 
     public void Loop(nutility.Tree<string, InputReplLevel> tree)
     {
@@ -174,7 +177,7 @@ namespace nutility
             var current_class_level = current_tree.Value as InputClassReplLevel;
             if (current_instance_level != null)
             {
-              nutility.Switch.AsType(target_args, current_instance_level.InputInstance);
+              nutility.Switch.AsType(args, current_instance_level.InputInstance);
             }
             else
             {
@@ -182,6 +185,7 @@ namespace nutility
             }
           }
         }
+        Writer.WriteLine(new string('-', ConsoleWindowWidth - 1));
       } while (true);
     }
 
@@ -253,7 +257,6 @@ namespace nutility
       Writer.WriteLine($"Current input {level} type: {type.FullName}");
       if (input.Contains(HelpExpandCommand))
       {
-        Writer.WriteLine($"Working with {type.FullName}:");
         ShowUsage(type);
       }
 
@@ -262,10 +265,10 @@ namespace nutility
       foreach (var child in childs_classes)
       {
         var child_class_level = child.Value.Value as InputClassReplLevel;
-        Writer.WriteLine($"\t{child.Key} ({child_class_level?.InputClass.FullName})");
+        Writer.WriteLine($"\r\n\t{child.Key} ({child_class_level?.InputClass.FullName})");
         if (input.Contains(HelpDetailCommand))
         {
-          ShowUsage(child_class_level.InputClass);
+          ShowUsage(child_class_level.InputClass, 2);
         }
       }
 
@@ -274,11 +277,12 @@ namespace nutility
       foreach (var child in childs_instances)
       {
         var child_instance_level = child.Value.Value as InputInstanceReplLevel;
-        Writer.WriteLine($"\t{child.Key} ({child_instance_level.InputInstance.GetType().FullName})");
+        Writer.WriteLine($"\r\n\t{child.Key} ({child_instance_level.InputInstance.GetType().FullName})");
       }
+
       var commands = $"{reserved.Keys.Aggregate(new StringBuilder(" "), (whole, next) => whole.AppendFormat(" {0}", next))}";
       Writer.WriteLine($"\r\nGeneral commands: {commands.Substring(1)}");
-      if (input == HelpExpandCommand)
+      if (input.Contains(HelpExpandCommand))
       {
         Writer.WriteLine($"\t{HelpCommand} {HelpExpandCommand} {HelpDetailCommand} (this help)");
         Writer.WriteLine($"\t{GoUpCommand} (go up one level)");
@@ -289,8 +293,9 @@ namespace nutility
       }
     }
 
-    private void ShowUsage(Type type)
+    private void ShowUsage(Type type, int tab_level = 1)
     {
+      var identation = new string('\t', tab_level);
       var writer = new System.IO.StringWriter();
       nutility.Switch.ShowUsage(type, writer);
       var reader = new System.IO.StringReader($"{writer}");
@@ -298,9 +303,10 @@ namespace nutility
       {
         var line = reader.ReadLine();
         if (line == null) break;
-        Writer.WriteLine($"\t{line}");
+        Writer.WriteLine($"{identation}{line}");
       } while (true);
     }
+
     private void clear() => Console.Clear();
   }
 }

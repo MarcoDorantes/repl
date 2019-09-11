@@ -37,7 +37,7 @@ namespace repl.cli1
   }
   public class CLI
   {
-    public static void MainEntryPoint(string[] args, TextReader reader = null, TextWriter writer = null)
+    public static void MainEntryPoint(string[] args, TextReader reader = null, TextWriter writer = null, int consoleWindowWidth = 20)
     {
       try
       {
@@ -52,7 +52,7 @@ namespace repl.cli1
         if (Environment.UserInteractive)
         {
           WriteLine($"Hello, {Environment.UserDomainName}\\{Environment.UserName} !!!");
-          WriteLine($"PID: {System.Diagnostics.Process.GetCurrentProcess().Id} Thread: {System.Threading.Thread.CurrentThread.ManagedThreadId} Culture: {System.Threading.Thread.CurrentThread?.CurrentUICulture?.Name}, {System.Threading.Thread.CurrentThread?.CurrentCulture?.Name}\n");
+          Write($"PID: {System.Diagnostics.Process.GetCurrentProcess().Id} Thread: {System.Threading.Thread.CurrentThread.ManagedThreadId} Culture: {System.Threading.Thread.CurrentThread?.CurrentUICulture?.Name}, {System.Threading.Thread.CurrentThread?.CurrentCulture?.Name}\n");
         }
         /*if (!(args?.Any() == true) || args?.First().Contains("?") == true)
         {
@@ -68,7 +68,7 @@ namespace repl.cli1
           var uc3 = new nutility.InputClassReplLevel("UC3", typeof(InputUC3));
           use_case_hierarchy_root[uc3.ID] = new nutility.Tree<string, nutility.InputReplLevel> { Value = uc3, Parent = use_case_hierarchy_root };
 
-          var repl = new nutility.REPL { Reader = reader, Writer = writer };
+          var repl = new nutility.REPL { Reader = reader, Writer = writer, ConsoleWindowWidth = consoleWindowWidth };
           repl.Loop(use_case_hierarchy_root);
         }
       }

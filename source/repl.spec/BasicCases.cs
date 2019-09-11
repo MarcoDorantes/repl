@@ -31,8 +31,8 @@ namespace repl.spec
       //current_level.Instances.Add("x1", inputX_instance);
       var tree = new nutility.Tree<string, nutility.InputReplLevel> { Value = current_level };
 
-      var input_lines = new[] { "?" };
-      var reader = new StringReader(asTextContent(input_lines));
+      var input_lines = new[] { "?", "new x1" };
+      var reader = new StringReader(Common.asTextContent(input_lines));
       var writer = new StringWriter();
       var repl = new nutility.REPL { Reader = reader, Writer = writer };
 
@@ -42,7 +42,6 @@ namespace repl.spec
       //Assert
       Assert.IsTrue($"{writer}".Contains("x1"));
     }
-    private string asTextContent(IEnumerable<string> lines) => $"{lines?.Aggregate(new StringWriter(), (whole, next) => { whole.WriteLine(next); return whole; })}";
   }
 
   [TestClass]
@@ -62,7 +61,7 @@ namespace repl.spec
         var tree = new nutility.Tree<string, nutility.InputReplLevel> { Value = current_level };
 
         var input_lines = new[] { "-f1 -n=-132" };
-        var reader = new StringReader(asTextContent(input_lines));
+        var reader = new StringReader(Common.asTextContent(input_lines));
         var writer = new StringWriter();
         Console.SetOut(writer);
         var repl = new nutility.REPL { Reader = reader, Writer = writer };
@@ -102,6 +101,10 @@ namespace repl.spec
       }
     }
 
-    private string asTextContent(IEnumerable<string> lines) => $"{lines?.Aggregate(new StringWriter(), (whole, next) => { whole.WriteLine(next); return whole; })}";
+  }
+
+  static class Common
+  {
+    public static string asTextContent(IEnumerable<string> lines) => $"{lines?.Aggregate(new StringWriter(), (whole, next) => { whole.WriteLine(next); return whole; })}";
   }
 }
