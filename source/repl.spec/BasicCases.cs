@@ -18,6 +18,21 @@ namespace repl.spec
     }
   }
 
+  class InputY
+  {
+    private readonly TextWriter writer;
+    public InputY(TextWriter writer)
+    {
+      this.writer = writer;
+    }
+
+    public int N;
+    public void f1()
+    {
+      writer.WriteLine($"{nameof(N)}: {N}");
+    }
+  }
+
   [TestClass]
   public class BasicCases
   {
@@ -39,13 +54,32 @@ namespace repl.spec
       //Assert
       Assert.IsTrue($"{writer}".Contains($"x1 ({typeof(InputX).FullName})"));
     }
+
+    [TestMethod]
+    public void capture_TextWriter()
+    {
+      //Arrange
+      var input_lines = new[] { "x1 -f1 -n=43" };
+      var reader = new StringReader(Common.asTextContent(input_lines));
+      var repl = new nutility.REPL { Reader = reader };
+
+      var level_writer = new StringWriter();
+      var current_level = new nutility.InputInstanceReplLevel("x1", new InputY(level_writer));
+      var tree = new nutility.Tree<string, nutility.InputReplLevel> { Value = current_level };
+
+      //Act
+      repl.Loop(tree);
+
+      //Assert
+      Assert.AreEqual("N: 43\r\n", $"{level_writer}");
+    }
   }
 
   [TestClass]
   public class CLI_1_BasicCases
   {
     [TestMethod]
-    public void basic()
+    public void capture_standard_output()
     {
       //Arrange
       var asFound = Console.Out;
